@@ -13,6 +13,11 @@
 
 
       <!-- This contains the splash screen content -->
+      <SplashScreen
+        :color="accentColor"
+        highlight-color="red"
+        :loaded="!isLoading"
+      />
 
 
       <!-- This block contains the elements (e.g. icon buttons displayed at/near the top of the screen -->
