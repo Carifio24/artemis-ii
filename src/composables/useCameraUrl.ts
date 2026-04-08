@@ -33,7 +33,7 @@ export function useCameraUrl(fallback: CameraView, successWatch: Ref<boolean>) {
     url.searchParams.set("fov",   zoomDeg().toFixed(6));
     url.searchParams.set("rot",   rotationDeg().toFixed(6));
     url.searchParams.set("angle", angleDeg().toFixed(6));
-    url.searchParams.set("time", time().toString())
+    url.searchParams.set("time", time().toString());
     return url.toString();
   }
 
@@ -44,12 +44,11 @@ export function useCameraUrl(fallback: CameraView, successWatch: Ref<boolean>) {
 
   watch(successWatch, success => {
     if (success) {
-      console.log('yaah')
       setTimeout(() => {
         successWatch.value = false;
-      }, 1800)
+      }, 1800);
     }
-  })
+  });
   // Apply initial view from URL (or fallback) once.
   moveViewCamera(readUrl(), true);
 

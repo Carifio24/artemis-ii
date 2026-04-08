@@ -58,9 +58,8 @@
               :class="['artemis-btn', 'copy-btn', copySuccess ? 'copy-success' : '']"
               @click="copyViewUrl"
               @keyup.enter="copyViewUrl"
-              
             >
-              <span>{{copySuccess ? 'Copied URL!' : 'Copy view URL'}}
+              <span>{{ copySuccess ? 'Copied URL!' : 'Copy view URL' }}
               <!-- <v-icon v-if="copySuccess" color="#32cd32" icon="mdi-check-circle"></v-icon>  -->
               </span>
             </button>
@@ -302,7 +301,7 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
       layer.set_cartesianScale(AltUnits.astronomicalUnits);
       layer.set_altUnit(AltUnits.astronomicalUnits);
       layer.set_markerScale(MarkerScales.screen);
-      layer.set_plotType(PlotTypes.gaussian)
+      layer.set_plotType(PlotTypes.gaussian);
       layer.set_scaleFactor(30);
       layer.set_color(Color.fromHex("#ff0000"));
       layer.set_showFarSide(true);

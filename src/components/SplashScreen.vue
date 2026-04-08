@@ -1,70 +1,75 @@
 <template>
   <v-overlay
+    id="splash-overlay"
     :model-value="showSplashScreen"
     :scrim="false"
-    absolute
 
+    absolute
     :style="cssVars"
-    id="splash-overlay"
     transition="fade-transition"
   >
     <focus-trap>
-    <div
-      id="splash-screen"
-      v-click-outside="closeSplashScreen"
-      :style="cssVars"
-    >
-      <div class="background">
-        <div class="background-blur"></div>
-      </div>
       <div
-        id="first-splash-row"
+        id="splash-screen"
+        v-click-outside="closeSplashScreen"
+        :style="cssVars"
       >
-        <font-awesome-icon
-          id="close-splash-button"
-          @click="closeSplashScreen"
-          @keyup.enter="closeSplashScreen"
-          icon="xmark"
-          tabindex="0"
-          />
-        <div id="splash-screen-text" class="mb-2">
-          <p>See the </p>
-          <p class="highlight">Artemis II Trajectory</p>
+        <div class="background">
+          <div class="background-blur"></div>
         </div>
-      </div>
-
-      <div>
-        <v-btn
-          class="splash-get-started"
-          @click="closeSplashScreen"
-          @keyup.enter="closeSplashScreen"
-          color="secondary"
-          :density="$vuetify.display.xs ? 'compact' : 'default'"
-          :size="$vuetify.display.width < 250 ? 'large' : 'x-large'"
-          variant="elevated"
-          rounded="lg"
+        <div
+          id="first-splash-row"
         >
-          Get Started
-        </v-btn>
-      </div>
-    
-      <div id="splash-screen-acknowledgements">
-        <div id="splash-screen-logos">
-          <credit-logos
-            id="splash-screen-credit-logos"
-            logo-size="5vmin"
-            :default-logos="['cosmicds', 'wwt', 'sciact', 'nasa']"
+          <font-awesome-icon
+            id="close-splash-button"
+            icon="xmark"
+            tabindex="0"
+            @click="closeSplashScreen"
+            @keyup.enter="closeSplashScreen"
           />
+          <div
+            id="splash-screen-text"
+            class="mb-2"
+          >
+            <p>See the </p>
+            <p class="highlight">
+              Artemis II Trajectory
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <v-btn
+            class="splash-get-started"
+            color="secondary"
+            :density="$vuetify.display.xs ? 'compact' : 'default'"
+            :size="$vuetify.display.width < 250 ? 'large' : 'x-large'"
+            variant="elevated"
+            rounded="lg"
+            @click="closeSplashScreen"
+            @keyup.enter="closeSplashScreen"
+          >
+            Get Started
+          </v-btn>
+        </div>
+    
+        <div id="splash-screen-acknowledgements">
+          <div id="splash-screen-logos">
+            <credit-logos
+              id="splash-screen-credit-logos"
+              logo-size="5vmin"
+              :default-logos="['cosmicds', 'wwt', 'sciact', 'nasa']"
+            />
+          </div>
         </div>
       </div>
-    </div>
     </focus-trap>
   </v-overlay>
 </template>
 
 
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue';
+import { computed } from 'vue';
 import { FocusTrap } from "focus-trap-vue";
 
 export interface Props {
@@ -78,6 +83,8 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), {
   cssVars: () => ({}),
   loaded: true,
+  color: 'white',
+  highlightColor: 'white'
 });
 
 const cssVars = computed(() => {
@@ -89,13 +96,12 @@ const cssVars = computed(() => {
 
 const emits = defineEmits(['close']);
 
-const showSplashScreen = defineModel({ default: true });
+const showSplashScreen = defineModel<boolean>({ default: true });
 const splash = new URLSearchParams(window.location.search).get("splash")?.toLowerCase() !== "false";
 if (!splash) {
   showSplashScreen.value = false;
 }
 
-onMounted(() => {})
 
 // watch(() => props.loaded, (l) =>{
 //   if (l) {

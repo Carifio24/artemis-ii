@@ -1,35 +1,59 @@
 <template>
-  <v-card class="info-sheet" height="100%">
-    <v-tabs v-model="tab" height="32px" :color="textColor" :slider-color="textColor" id="tabs" dense align-tabs="end">
-      <v-tab class="info-tabs" tabindex="0">
+  <v-card
+    class="info-sheet"
+    height="100%"
+  >
+    <v-tabs
+      id="tabs"
+      v-model="tab"
+      height="32px"
+      :color="textColor"
+      :slider-color="textColor"
+      dense
+      align-tabs="end"
+    >
+      <v-tab
+        class="info-tabs"
+        tabindex="0"
+      >
         <h3>Information</h3>
       </v-tab>
-      <v-tab class="info-tabs" tabindex="0">
+      <v-tab
+        class="info-tabs"
+        tabindex="0"
+      >
         <h3>User Guide</h3>
       </v-tab>
-      
     </v-tabs>
     <font-awesome-icon 
       id="close-text-icon" 
       class="control-icon" 
       icon="times" 
       size="lg" 
-      @click="showTextSheet = false"
-      @keyup.enter="showTextSheet = false" 
       tabindex="0"
+      @click="showTextSheet = false" 
+      @keyup.enter="showTextSheet = false"
     >
     </font-awesome-icon>
       
     <!-- Information Content -->
-    <v-window v-model="tab" id="tab-items" class="pb-2">
+    <v-window
+      id="tab-items"
+      v-model="tab"
+      class="pb-2"
+    >
       <v-window-item>
         <v-card class="scrollable">
           <v-card-text class="info-text scrollable">
-              <h4 class="user-guide-header">Tracking Artemis II</h4>
-              <p>
-                Place Holder
-              </p>
-              <h4 class="user-guide-header mt-5">Technical Note</h4>
+            <h4 class="user-guide-header">
+              Tracking Artemis II
+            </h4>
+            <p>
+              Place Holder
+            </p>
+            <h4 class="user-guide-header mt-5">
+              Technical Note
+            </h4>
           </v-card-text>
         </v-card>
       </v-window-item>
@@ -38,22 +62,29 @@
       <v-window-item>
         <v-card class="scrollable">
           <v-card-text class="info-text scrollable">
+            <h4 class="user-guide-header">
+              Tracking Artemis II
+            </h4>
+            <p>
+              This <a
+                href="https://www.worldwidetelescope.org/home"
+                target="_blank"
+                rel="noopener noreferrer"
+              >WorldWide Telescope</a> (WWT) interactive provides an view of of the Artemis II 
+              trajectory, from ICPS separation (3h24m18s after launch) to splash down. 
+            </p>
+            <h4 class="user-guide-header mt-5">
+              Technical Note
+            </h4>
 
-              <h4 class="user-guide-header">Tracking Artemis II</h4>
-              <p>
-                This <a href="https://www.worldwidetelescope.org/home" target="_blank"
-                  rel="noopener noreferrer">WorldWide Telescope</a> (WWT) interactive provides an view of of the Artemis II 
-                  trajectory, from ICPS separation (3h24m18s after launch) to splash down. 
-              </p>
-              <h4 class="user-guide-header mt-5">Technical Note</h4>
-
-              <ul>
-                <li>Data is a JPL Horizons Vector Table for Artemis II, centered on the Earth (Goecenter [code: 500]). </li>
-                <li class="li">Data is current as of Apr 08, 2026 21:35 UTC 
-                  <details>
-                    <summary>Horizons Query</summary>
-                    <!-- do not intent inside pre tag  -->
-                    <pre>!$$SOF
+            <ul>
+              <li>Data is a JPL Horizons Vector Table for Artemis II, centered on the Earth (Goecenter [code: 500]). </li>
+              <li class="li">
+                Data is current as of Apr 08, 2026 21:35 UTC 
+                <details>
+                  <summary>Horizons Query</summary>
+                  <!-- do not intent inside pre tag  -->
+                  <pre>!$$SOF
 MAKE_EPHEM=YES
 COMMAND=-1024
 EPHEM_TYPE=VECTORS
@@ -71,88 +102,132 @@ VEC_LABELS='YES'
 VEC_DELTA_T='YES'
 CSV_FORMAT='YES'
 OBJ_DATA='YES'</pre>
-                  </details>
-                  
-                </li>
+                </details>
+              </li>
                 
-                <li class="li">Postion with respect to Moon may have a systematic offset</li>
-              </ul>
+              <li class="li">
+                Postion with respect to Moon may have a systematic offset
+              </li>
+            </ul>
                 
-              <h4 class="user-guide-header mt-5">Sky Navigation</h4>
-              <p>
-                To navigate the WWT view, use the following controls:
-              </p>
-              <v-row align="center" class="mt-2 mx-3">
-                <v-col cols="4">
-                  <v-chip label outlined>
-                    Pan
-                  </v-chip>
-                </v-col>
-                <v-col cols="8" class="pt-1">
-                  <strong>{{ touchscreen ? "press + drag" : "click + drag" }}</strong> {{ touchscreen ? "" : "or" }}
-                  <strong>{{ touchscreen ? "" : "W-A-S-D" }}</strong> {{ touchscreen ? "" : "keys" }}<br>
-                </v-col>
-              </v-row>
-              <v-row align="center" class="mx-3">
-                <v-col cols="4">
-                  <v-chip label outlined>
-                    Zoom
-                  </v-chip>
-                </v-col>
-                <v-col cols="8" class="pt-1">
-                  <strong>{{ touchscreen ? "pinch in and out" : "scroll in and out" }}</strong> {{ touchscreen ? "" :
+            <h4 class="user-guide-header mt-5">
+              Sky Navigation
+            </h4>
+            <p>
+              To navigate the WWT view, use the following controls:
+            </p>
+            <v-row
+              align="center"
+              class="mt-2 mx-3"
+            >
+              <v-col cols="4">
+                <v-chip
+                  label
+                  variant="outlined"
+                >
+                  Pan
+                </v-chip>
+              </v-col>
+              <v-col
+                cols="8"
+                class="pt-1"
+              >
+                <strong>{{ touchscreen ? "press + drag" : "click + drag" }}</strong> {{ touchscreen ? "" : "or" }}
+                <strong>{{ touchscreen ? "" : "W-A-S-D" }}</strong> {{ touchscreen ? "" : "keys" }}<br>
+              </v-col>
+            </v-row>
+            <v-row
+              align="center"
+              class="mx-3"
+            >
+              <v-col cols="4">
+                <v-chip
+                  label
+                  variant="outlined"
+                >
+                  Zoom
+                </v-chip>
+              </v-col>
+              <v-col
+                cols="8"
+                class="pt-1"
+              >
+                <strong>{{ touchscreen ? "pinch in and out" : "scroll in and out" }}</strong> {{ touchscreen ? "" :
                   "or" }} <strong>{{ touchscreen ? "" : "I-O" }}</strong> {{ touchscreen ? "" : "keys" }}<br>
-                </v-col>
-              </v-row>
-              <v-row align="center" class="mx-3">
-                <v-col cols="4">
-                  <v-chip label outlined>
-                    Rotate
-                  </v-chip>
-                </v-col>
-                <v-col cols="8" class="pt-1">
-                  {{ touchscreen ? "" : "press" }} <strong>{{ touchscreen ? "pinch and twist" : "control + click + drag"
-                    }}</strong> {{ touchscreen ? "" : "" }} <strong>{{ touchscreen ? "" : "" }}</strong> {{ touchscreen
+              </v-col>
+            </v-row>
+            <v-row
+              align="center"
+              class="mx-3"
+            >
+              <v-col cols="4">
+                <v-chip
+                  label
+                  variant="outlined"
+                >
+                  Rotate
+                </v-chip>
+              </v-col>
+              <v-col
+                cols="8"
+                class="pt-1"
+              >
+                {{ touchscreen ? "" : "press" }} <strong>{{ touchscreen ? "pinch and twist" : "control + click + drag"
+                }}</strong> {{ touchscreen ? "" : "" }} <strong>{{ touchscreen ? "" : "" }}</strong> {{ touchscreen
                   ? "" : "" }} (Keyboard option coming soon)<br>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="12">
-                  <h4 class="user-guide-header">Controls</h4>
-                  <ul class="text-list mx-5">
-                    <li>
-                      <strong>Select Background</strong>: Choose from DSS, 2MASS, SDSS, or unWISE.
-                    </li>
-                  </ul>
-                </v-col>
-              </v-row>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
+                <h4 class="user-guide-header">
+                  Controls
+                </h4>
+                <ul class="text-list mx-5">
+                  <li>
+                    <strong>Select Background</strong>: Choose from DSS, 2MASS, SDSS, or unWISE.
+                  </li>
+                </ul>
+              </v-col>
+            </v-row>
               
-              <!-- Credits -->
-              <v-row>
-                <v-col cols="12">
-                  <div class="credits">
-                    <h4 class="user-guide-header mt-3">Credits</h4>
-                    <h5><a href="https://www.cosmicds.cfa.harvard.edu/" target="_blank"
-                        rel="noopener noreferrer">CosmicDS</a></h5>
-                    <p>Jon Carifio</p>
-                    <p>John Lewis</p>
-                    <p>Pat Udomprasert</p>
-                    <p>Alyssa Goodman</p>
+            <!-- Credits -->
+            <v-row>
+              <v-col cols="12">
+                <div class="credits">
+                  <h4 class="user-guide-header mt-3">
+                    Credits
+                  </h4>
+                  <h5>
+                    <a
+                      href="https://www.cosmicds.cfa.harvard.edu/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >CosmicDS</a>
+                  </h5>
+                  <p>Jon Carifio</p>
+                  <p>John Lewis</p>
+                  <p>Pat Udomprasert</p>
+                  <p>Alyssa Goodman</p>
 
-                    <h5><a href="https://www.worldwidetelescope.org/home" target="_blank"
-                        rel="noopener noreferrer">WorldWide Telescope</a></h5>
-                    <p>Jon Carifio</p>
-                    <p>Peter Williams</p>
-                    <p>David Weigel</p>
-                  </div>
-                  <v-spacer class="end-spacer"></v-spacer>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <funding-acknowledgement />
-                </v-col>
-              </v-row>
+                  <h5>
+                    <a
+                      href="https://www.worldwidetelescope.org/home"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >WorldWide Telescope</a>
+                  </h5>
+                  <p>Jon Carifio</p>
+                  <p>Peter Williams</p>
+                  <p>David Weigel</p>
+                </div>
+                <v-spacer class="end-spacer"></v-spacer>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <funding-acknowledgement />
+              </v-col>
+            </v-row>
             <!-- </v-container> -->
           </v-card-text>
         </v-card>
@@ -170,13 +245,13 @@ const touchscreen = supportsTouchscreen();
 
 
 
-const showTextSheet = defineModel<boolean>()
+const showTextSheet = defineModel<boolean>();
 
 interface Props {
   textColor: string
 }
 
-defineProps<Props>()
+defineProps<Props>();
 
 </script>
 
