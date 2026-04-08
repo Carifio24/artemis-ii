@@ -2,6 +2,7 @@
   <v-app
     id="app"
     :style="cssVars"
+    :class="[smallSize ? 'app-is-small' : '']"
   >
     <div
       id="main-content"
@@ -29,6 +30,13 @@
               :color="buttonColor"
               tooltip-location="start"
               @activate="goHome"
+            >
+            </icon-button>
+            <icon-button
+              icon="mdi-information-variant"
+              :color="buttonColor"
+              tooltip-location="start"
+              @activate="() => showInfoSheet = !showInfoSheet"
             >
             </icon-button>
             <span class="zoom-label">+</span>
@@ -102,18 +110,14 @@
       </div>
     </div>
     <div
-      v-show="sheet === 'text'"
-      id="bottom-drawer"
+      id="side-drawer"
+      :class="[showInfoSheet ? 'side-drawer-open' : 'side-drawer-closed']"
     >
-      <article class="pa-5">
-        <h1>Bottom Drawer</h1>
-        <p>
-          Never gonna give you up.
-        </p>
-        <p>
-          Never gonnna let you down.
-        </p>
-      </article>
+      <InformationSheet
+        v-if="showInfoSheet"
+        v-model="showInfoSheet"
+        :text-color="accentColor"
+      />
     </div>
   </v-app>
 </template>
@@ -182,7 +186,7 @@ const props = withDefaults(defineProps<WwtPlaygroundProps>(), {
 
 
 const backgroundImagesets = reactive<BackgroundImageset[]>([]);
-const sheet = ref<SheetType | null>(null);
+const showInfoSheet = ref(false);
 const layersLoaded = ref(false);
 const positionSet = ref(false);
 const accentColor = ref("#ffa000");
@@ -241,6 +245,7 @@ const copySuccess = ref(false);
   
 import { loadHorizonsVectorsForWwt } from "./horizons";
 import SplashScreen from "./components/SplashScreen.vue";
+import InformationSheet from "./components/InformationSheet.vue";
 const layers = ref<SpreadSheetLayer[]>([]);
 
 const trackingCenter = ref<SolarSystemObjects>(SolarSystemObjects.moon);
@@ -424,17 +429,58 @@ const cssVars = computed(() => {
   // after `#bottom-drawer` takes its own height.
 }
 
+// while #app is a flex, the direct parent
+// is .v-application__wrap
+// this takes the size of it's children
+// so we need to apply height definitions here
+// for a display with a side-panel this is generally
+// what we want
+.v-application__wrap {
+  flex-direction: row;  // add for the side panel
+  max-height: 100svh;  // force the application to be 100%
+}
+
+#app.app-is-small {
+  .v-application__wrap {
+    flex-direction: column;  // add for the side panel
+    max-height: 100svh;  // force the application to be 100%
+  }
+}
 
 #main-content {
   // This is the containing block for the absolutely positioned WWT host and overlay.
   position: relative;
   display: block; // don't need to set width. block elements stretch to fill their container by default.
-
   // Its height is determined by the flex layout in `#app`.
   flex: 1 0 auto;
   overflow: hidden;
 
   transition: height 0.1s ease-in-out;
+}
+
+#side-drawer {
+  flex: 0 0 auto;
+  overflow: hidden;
+  width: 0;
+  // transition: width 0.3s ease-in-out;
+
+  &.side-drawer-open {
+    width: 34%;
+  }
+}
+
+#app.app-is-small {
+  #side-drawer {
+  flex: 0 0 auto;
+  overflow: hidden;
+  height: 0;
+  width: 100%;
+  // transition: width 0.3s ease-in-out;
+
+  &.side-drawer-open {
+    height: 34%;
+  }
+}
 }
 
 /* The WWT host is out of flow so its measured size does not affect #main-content. */
