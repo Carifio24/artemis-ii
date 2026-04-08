@@ -74,7 +74,10 @@
         <!-- This block contains the elements (e.g. the project icons) displayed along the bottom of the screen -->
 
         <div id="bottom-content">
-          <ArtemisTimeControl :can-create="positionSet" />
+          <ArtemisTimeControl 
+            :can-create="positionSet" 
+            :initial-time="INITIAL_TIME" 
+          />
           <div
             v-if="!smallSize"
             id="body-logos"
@@ -174,21 +177,24 @@ const props = withDefaults(defineProps<WwtPlaygroundProps>(), {
   }
 });
 
-const splash = new URLSearchParams(window.location.search).get("splash")?.toLowerCase() !== "false";
-const showSplashScreen = ref(splash);
+
 const backgroundImagesets = reactive<BackgroundImageset[]>([]);
 const sheet = ref<SheetType | null>(null);
 const layersLoaded = ref(false);
 const positionSet = ref(false);
-const accentColor = ref("#ffffff");
+const accentColor = ref("#ffa000");
 const buttonColor = ref("#ffffff");
+
+const urlTime = new URLSearchParams(window.location.search).get("time");
+
+const INITIAL_TIME = ref(urlTime ? new Date(+urlTime) : new Date("2026-04-06T22:32:00Z"));
 const INITIAL_VIEW: CameraView = {
   lng: 169.906038,
   lat: 1.323000,
   zoomDeg: 0.000163,
   rotationDeg: 0,
   angleDeg: 0,
-  opacity: 100,
+  time: INITIAL_TIME.value.getTime()
 };
 
 const zoomSliderValue = computed(() => fovToSlider(store.zoomDeg));
@@ -225,6 +231,7 @@ import { AltUnits } from "@wwtelescope/engine-types";
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 let copyViewUrl: () => Promise<void> = async () => {};
 import { loadHorizonsVectorsForWwt } from "./horizons";
+import SplashScreen from "./components/SplashScreen.vue";
 const layers = ref<SpreadSheetLayer[]>([]);
 
 const trackingCenter = ref<SolarSystemObjects>(SolarSystemObjects.moon);
