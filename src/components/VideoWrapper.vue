@@ -53,6 +53,7 @@ const showVideoSheet = defineModel<boolean>({ default: false });
 
 .video-wrapper
 {
+  position: relative;
   display: flex;
   padding: 10px;
   height: 100%;
@@ -62,6 +63,16 @@ const showVideoSheet = defineModel<boolean>({ default: false });
   text-align: center;
   z-index: 1000;
   // border: 1px solid white;
+}
+
+#video-close-icon
+{
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  cursor: pointer;
+  color: white;
+  z-index: 1001;
 }
 
 video,
