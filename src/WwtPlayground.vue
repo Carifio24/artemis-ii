@@ -19,6 +19,10 @@
         highlight-color="red"
         :loaded="!isLoading"
       />
+      <VideoWrapper
+        v-model="showVideo"
+        :src="VIDEO_URL"
+      />
 
 
       <!-- This block contains the elements (e.g. icon buttons displayed at/near the top of the screen -->
@@ -31,6 +35,14 @@
               tooltip-location="start"
               title="reset view"
               @activate="goHome"
+            >
+            </icon-button>
+            <icon-button
+              icon="mdi-video"
+              :color="buttonColor"
+              tooltip-location="start"
+              title="open video"
+              @activate="showVideo = !showVideo"
             >
             </icon-button>
             <icon-button
@@ -173,6 +185,7 @@ import { D2R, H2R  } from "@wwtelescope/astro";
 import { AstroCalc, Color, SpreadSheetLayer } from "@wwtelescope/engine";
 import { CoordinatesType, MarkerScales, PlotTypes, ReferenceFrames, SolarSystemObjects } from "@wwtelescope/engine-types";
 import ArtemisTimeControl from "./components/ArtemisTimeControl.vue";
+import VideoWrapper from "./components/VideoWrapper.vue";
 
 import { useCameraUrl } from "./composables/useCameraUrl";
 import { moveViewCamera, layerManagerDraw, getDepth, getCoordinatesForScreenPoint,getScreenPointForCoordinates, transformPickPointToWorldSpace, transformWorldPointToPickSpace, renderOneFrame, makeFrustum, type CameraView } from "./wwt-hacks";
@@ -228,10 +241,12 @@ const props = withDefaults(defineProps<WwtPlaygroundProps>(), {
 
 const backgroundImagesets = reactive<BackgroundImageset[]>([]);
 const showInfoSheet = ref(false);
+const showVideo = ref(false);
 const layersLoaded = ref(false);
 const positionSet = ref(false);
 const accentColor = ref("#ffa000");
 const buttonColor = ref("#ffffff");
+const VIDEO_URL = "https://www.youtube.com/embed/ML9y0Z7A8ec?autoplay=1&mute=1";
 
 const urlTime = new URLSearchParams(window.location.search).get("time");
 const HOME_TIME = new Date("2026-04-06T22:32:00Z");
@@ -729,7 +744,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     pointer-events: auto;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.45);
-    border-radius: 4px;
+    border-radius: 4px !important;
     color: #fff;
     font-size: 0.8rem;
     padding: 4px 10px;
