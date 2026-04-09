@@ -85,7 +85,7 @@
             >
               {{ showSkyBackground ? 'Hide' : 'Show' }} background
             </button>
-            
+
             <button
               class="artemis-btn"
               @click="showTrajectory = !showTrajectory"
@@ -93,10 +93,10 @@
             >
               {{ showSkyBackground ? 'Hide' : 'Show' }} Trajectory
             </button>
-            
+
             <hr />
-            
-            
+
+
             <button
               class="artemis-btn"
               @click="trackingCenter = SolarSystemObjects.moon"
@@ -111,9 +111,9 @@
             >
               Track Earth
             </button>
-            
-            <div 
-              v-if="!smallSize" 
+
+            <div
+              v-if="!smallSize"
               class="legend"
             >
               <p class="location">
@@ -128,13 +128,13 @@
         <!-- This block contains the elements (e.g. the project icons) displayed along the bottom of the screen -->
 
         <div id="bottom-content">
-          <ArtemisTimeControl 
+          <ArtemisTimeControl
             v-model:time="currentTime"
-            :can-create="positionSet" 
-            :initial-time="INITIAL_TIME" 
+            :can-create="positionSet"
+            :initial-time="INITIAL_TIME"
           />
-          <div 
-            v-if="smallSize" 
+          <div
+            v-if="smallSize"
             class="legend legend-small"
           >
             <p class="location">
@@ -246,7 +246,7 @@ const layersLoaded = ref(false);
 const positionSet = ref(false);
 const accentColor = ref("#ffa000");
 const buttonColor = ref("#ffffff");
-const VIDEO_URL = "https://youtu.be/ML9y0Z7A8ec?autoplay=1";
+const VIDEO_URL = "https://youtube.com/embed/ML9y0Z7A8ec?autoplay=1";
 
 const urlTime = new URLSearchParams(window.location.search).get("time");
 const HOME_TIME = new Date("2026-04-06T22:32:00Z");
@@ -323,19 +323,19 @@ import { AltUnits } from "@wwtelescope/engine-types";
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 let copyViewUrl: () => Promise<void> = async () => {};
 const copySuccess = ref(false);
-  
-  
+
+
 import { loadHorizonsVectorsForWwt } from "./horizons";
 import SplashScreen from "./components/SplashScreen.vue";
 import InformationSheet from "./components/InformationSheet.vue";
 const layers = ref<SpreadSheetLayer[]>([]);
 
 const trackingCenter = ref<SolarSystemObjects>(SolarSystemObjects.moon);
-  
+
 const showTrajectory = ref(true);
 
 async function createArtemisLayers(trackedObject: SolarSystemObjects) {
-  
+
   const vec = await loadHorizonsVectorsForWwt('./horizons_results-earth.txt', SolarSystemObjects.earth, trackedObject);
   const items = vec.split("\r\n");
   const header = items.shift();
@@ -351,7 +351,7 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
   bounds = [[0, centerStart], ...bounds, [centerEnd, end]];
   bounds.forEach((bds) => {
     const data = items.slice(...bds).join("\r\n");
-    
+
     if (showTrajectory.value) {
       store.createTableLayer({
         name: 'Artemis',
@@ -373,9 +373,9 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
         layers.value.push(layer);
       });
     }
-  
 
-    
+
+
     store.createTableLayer({
       name: 'Artemis Time',
       referenceFrame: 'Sky',
@@ -401,7 +401,7 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
       layers.value.push(layer);
     });
   });
-  
+
   const showMoonRefLayer = false;
   if (showMoonRefLayer) {
     const vecMoon = await loadHorizonsVectorsForWwt('./horizons_results-moon.txt', SolarSystemObjects.moon, trackedObject);
@@ -424,9 +424,9 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
       layer.set_opacity(25);
       layers.value.push(layer);
     });
-  
+
   }
-  
+
 }
 
 function removeArtemisLayers() {
@@ -472,7 +472,7 @@ onMounted(() => {
 
     store.setTrackedObject(trackingCenter.value);
     createArtemisLayers(trackingCenter.value);
-    
+
 
     ({ copyViewUrl } = useCameraUrl(INITIAL_VIEW, copySuccess));
     positionSet.value = true;
@@ -701,7 +701,7 @@ and remember, position:absolute is still a positioned parent, so children can be
   gap: 10px;
   align-items: flex-end;
   height: auto;
-  
+
   hr {
     margin-block: 0.25em;
     opacity: 0;
@@ -719,7 +719,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     user-select: none;
     &:hover { background: rgba(255, 255, 255, 0.25); }
   }
-  
+
   .copy-btn {
     transition: border-color 0.2s, box-shadow 0.2s;
     width: 15ch;
@@ -751,7 +751,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     cursor: pointer;
     &:hover { background: rgba(255, 255, 255, 0.25); }
   }
-  
+
 
 #bottom-content {
   display: flex;
