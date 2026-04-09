@@ -70,6 +70,18 @@
             >
               {{ showSkyBackground ? 'Hide' : 'Show' }} background
             </button>
+            
+            <button
+              class="artemis-btn"
+              @click="showTrajectory = !showTrajectory"
+              @keyup.enter="showTrajectory = !showTrajectory"
+            >
+              {{ showSkyBackground ? 'Hide' : 'Show' }} Trajectory
+            </button>
+            
+            <hr />
+            
+            
             <button
               class="artemis-btn"
               @click="trackingCenter = SolarSystemObjects.moon"
@@ -282,6 +294,8 @@ import InformationSheet from "./components/InformationSheet.vue";
 const layers = ref<SpreadSheetLayer[]>([]);
 
 const trackingCenter = ref<SolarSystemObjects>(SolarSystemObjects.moon);
+  
+const showTrajectory = ref(true);
 
 async function createArtemisLayers(trackedObject: SolarSystemObjects) {
   
@@ -300,25 +314,28 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
   bounds = [[0, centerStart], ...bounds, [centerEnd, end]];
   bounds.forEach((bds) => {
     const data = items.slice(...bds).join("\r\n");
-    store.createTableLayer({
-      name: 'Artemis',
-      referenceFrame: 'Sky',
-      dataCsv: `${header}\r\n${data}`,
-    }).then(layer => {
-      layer.set_xAxisColumn(2);
-      layer.set_yAxisColumn(3);
-      layer.set_zAxisColumn(4);
-      layer.set_coordinatesType(CoordinatesType.rectangular);
-      layer.set_astronomical(true);
-      layer.set_cartesianScale(AltUnits.astronomicalUnits);
-      layer.set_altUnit(AltUnits.astronomicalUnits);
-      layer.set_markerScale(MarkerScales.screen);
-      layer.set_scaleFactor(1);
-      layer.set_color(Color.fromHex("#ffffff"));
-      layer.set_showFarSide(true);
-      layer.set_opacity(25);
-      layers.value.push(layer);
-    });
+    
+    if (showTrajectory.value) {
+      store.createTableLayer({
+        name: 'Artemis',
+        referenceFrame: 'Sky',
+        dataCsv: `${header}\r\n${data}`,
+      }).then(layer => {
+        layer.set_xAxisColumn(2);
+        layer.set_yAxisColumn(3);
+        layer.set_zAxisColumn(4);
+        layer.set_coordinatesType(CoordinatesType.rectangular);
+        layer.set_astronomical(true);
+        layer.set_cartesianScale(AltUnits.astronomicalUnits);
+        layer.set_altUnit(AltUnits.astronomicalUnits);
+        layer.set_markerScale(MarkerScales.screen);
+        layer.set_scaleFactor(1);
+        layer.set_color(Color.fromHex("#ffffff"));
+        layer.set_showFarSide(true);
+        layer.set_opacity(25);
+        layers.value.push(layer);
+      });
+    }
   
 
     
@@ -442,6 +459,11 @@ watch(trackingCenter, (trackedObject) => {
     moveViewCamera(EARTH_VIEW, false);
   }
   createArtemisLayers(trackedObject);
+});
+
+watch(showTrajectory, (show) => {
+  removeArtemisLayers();
+  createArtemisLayers(trackingCenter.value);
 });
 
 const ready = computed(() => layersLoaded.value && positionSet.value);
