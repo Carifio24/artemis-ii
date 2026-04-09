@@ -174,6 +174,8 @@ watch(play, (isPlaying) => {
   grid-template-rows: auto auto;
   align-items: center;
   gap: 0.5rem 1rem;
+  pointer-events: auto;
+  user-select: none;
 }
 
 .artemis-play {

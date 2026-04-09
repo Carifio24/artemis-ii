@@ -701,6 +701,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     font-size: 0.8em;
     padding: 4px 10px;
     cursor: pointer;
+    user-select: none;
     &:hover { background: rgba(255, 255, 255, 0.25); }
   }
   
