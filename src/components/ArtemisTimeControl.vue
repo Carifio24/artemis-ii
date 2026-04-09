@@ -1,9 +1,9 @@
 <template>
   <div class="artemis-tracker">
     <div class="artemis-labels">
-      <span>{{ formatDate(MISSION_START) }}</span>
+      <span class="left-time">{{ formatDate(MISSION_START) }}</span>
       <span class="current-time">{{ formatDate(currentTime) }}</span>
-      <span>{{ formatDate(MISSION_END) }}</span>
+      <span class="right-time">{{ formatDate(MISSION_END) }}</span>
     </div>
     <input
       type="range"
@@ -96,7 +96,20 @@ watch(
   display: flex;
   justify-content: space-between;
   opacity: 0.8;
+  gap: 2rem;
 
+}
+
+.artemis-labels > span.left-time {
+  text-align: left;
+}
+
+.artemis-labels > span.current-time {
+  text-align: center;
+}
+
+.artemis-labels > span.right-time {
+  text-align: right;
 }
 
 .time-slider {

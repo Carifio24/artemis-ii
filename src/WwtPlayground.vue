@@ -96,6 +96,16 @@
             >
               Track Earth
             </button>
+            
+            <div 
+              v-if="!smallSize" 
+              class="legend"
+            >
+              <p class="location">
+                <span>Artemis II location</span>
+              </p>
+              <p>Artemis II trajectory</p>
+            </div>
           </div>
         </div>
 
@@ -108,6 +118,15 @@
             :can-create="positionSet" 
             :initial-time="INITIAL_TIME" 
           />
+          <div 
+            v-if="smallSize" 
+            class="legend legend-small"
+          >
+            <p class="location">
+              <span>Location</span>
+            </p>
+            <p>Trajectory</p>
+          </div>
           <div
             v-if="!smallSize"
             id="body-logos"
@@ -506,7 +525,7 @@ const cssVars = computed(() => {
 // for a display with a side-panel this is generally
 // what we want
 .v-application__wrap {
-  flex-direction: row;  // add for the side panel
+  flex-direction: row-reverse;  // add for the side panel
   max-height: 100svh;  // force the application to be 100%
 }
 
@@ -664,6 +683,11 @@ and remember, position:absolute is still a positioned parent, so children can be
   gap: 10px;
   align-items: flex-end;
   height: auto;
+  
+  hr {
+    margin-block: 0.25em;
+    opacity: 0;
+  }
 
   .artemis-btn {
     pointer-events: auto;
@@ -671,7 +695,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     border: 1px solid rgba(255, 255, 255, 0.45);
     border-radius: 4px;
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.8em;
     padding: 4px 10px;
     cursor: pointer;
     &:hover { background: rgba(255, 255, 255, 0.25); }
@@ -688,6 +712,14 @@ and remember, position:absolute is still a positioned parent, so children can be
   }
 }
 
+
+#app.app-is-small .artemis-btn {
+  font-size: 0.65rem;
+}
+
+#app.app-is-small  .copy-btn {
+    width: 16ch;
+}
 
 .icon-wrapper {
     pointer-events: auto;
@@ -730,6 +762,11 @@ and remember, position:absolute is still a positioned parent, so children can be
   }
 }
 
+#app.app-is-small #bottom-content {
+  margin-bottom: 1rem;
+  padding-inline: 1rem;
+}
+
 // From Sara Soueidan (https://www.sarasoueidan.com/blog/focus-indicators/) & Erik Kroes (https://www.erikkroes.nl/blog/the-universal-focus-state/)
 :focus-visible {
   /* Keep this override outside Vuetify's layers so it wins without !important. */
@@ -764,5 +801,42 @@ and remember, position:absolute is still a positioned parent, so children can be
   // flex: 0 0 200px;
   overflow: auto;
 }
+
+.legend {
+  font-size: 0.8em;
+  line-height: 2;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 0.5em;
+  padding-left: 1em;
+  background-color: rgba(0,0,0,.6);
+  backdrop-filter: blur(5px);
+  margin-top: calc(0.5em + 10px);
+  pointer-events: auto;
+  user-select: none;
+}
+
+.legend > p {
+  display: list-item;
+  list-style-type: disc;
+  list-style-position: inside;
+}
+
+.legend > p.location {
+  color: red;
+}
+.legend > p.location > span {
+  color: white;
+}
+
+.legend-small {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-size: clamp(6pt, 4vw, 0.8em);
+  margin-top: 2em;
+}
+
+
 
 </style>
