@@ -43,6 +43,13 @@
               tooltip-location="start"
               title="open video"
               @activate="showVideo = !showVideo"
+            ></icon-button>
+            <icon-button
+              v-if="kiosk && !fullscreen"
+              id="fullscreen-icon"
+              @activate="fullscreen = !fullscreen"
+              :icon="fullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
+              :color="buttonColor"
             >
             </icon-button>
             <icon-button
@@ -220,7 +227,6 @@ const searchParams = new URLSearchParams(window.location.search);
 const kiosk = searchParams.get("kiosk")?.toLowerCase() === "true";
 if (kiosk) {
   document.body.classList.add("kiosk");
-  fullscreen.value = true;
 }
 
 const store = engineStore();
