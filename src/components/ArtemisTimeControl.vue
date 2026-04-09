@@ -210,13 +210,26 @@ watch(play, (isPlaying) => {
 .time-slider {
   width: 100%;
   accent-color: rgb(255, 160, 0);
+  cursor: pointer;
 }
 
 .artemis-rate {
   grid-area: 2 / 2 / 3 / 3;
   pointer-events: auto;
   color: #fff;
-  font-size: 0.78rem;
-  opacity: 0.8;
+  font-size: 0.8rem;
+}
+.artemis-rate label {
+  user-select: none;
+}
+
+.artemis-rate select {
+  cursor: pointer;
+  /* get back some browser defautls */
+  appearance: revert;
+  outline: 1px solid hsl(38, 50%, 50%);
+  border-radius: 3px;
+  background-color: black;
+  padding: 1px 2px;
 }
 </style>
