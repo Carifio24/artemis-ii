@@ -744,7 +744,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     pointer-events: auto;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.45);
-    border-radius: 4px;
+    border-radius: 4px !important;
     color: #fff;
     font-size: 0.8rem;
     padding: 4px 10px;
