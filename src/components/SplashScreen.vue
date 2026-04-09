@@ -138,6 +138,7 @@ function closeSplashScreen() {
 #splash-screen {
   color: white;
   user-select: none;
+  contain: paint;
 
   @media (max-width: 699px) {
     max-height: 80vh;
@@ -154,7 +155,7 @@ function closeSplashScreen() {
   .background {
     position: fixed;
     inset: 0;
-    background-image: url(moon.jpg);
+    background-image: url('../assets/moon.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     contain: strict;

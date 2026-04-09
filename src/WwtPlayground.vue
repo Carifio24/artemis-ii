@@ -29,6 +29,7 @@
               icon="mdi-home"
               :color="buttonColor"
               tooltip-location="start"
+              title="reset view"
               @activate="goHome"
             >
             </icon-button>
@@ -36,6 +37,7 @@
               icon="mdi-information-variant"
               :color="buttonColor"
               tooltip-location="start"
+              title="toggle info sheet"
               @activate="() => showInfoSheet = !showInfoSheet"
             >
             </icon-button>
@@ -43,6 +45,7 @@
             <input
               type="range"
               class="zoom-slider"
+              title="zoom slider"
               min="0"
               max="1"
               step="0.001"
@@ -377,8 +380,8 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
       layer.set_showFarSide(true);
       layer.set_opacity(100);
       layer.set_startDateColumn(1);
-      layer.set_endDateColumn(5);
-      layer.set_decay(1. / (60 * 24));
+      layer.set_endDateColumn(1);
+      layer.set_decay(4.99 / (60 * 24));
       layer.set_timeSeries(true);
       layers.value.push(layer);
     });
@@ -698,6 +701,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     font-size: 0.8em;
     padding: 4px 10px;
     cursor: pointer;
+    user-select: none;
     &:hover { background: rgba(255, 255, 255, 0.25); }
   }
   
