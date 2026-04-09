@@ -83,7 +83,7 @@
               @click="showSkyBackground = !showSkyBackground"
               @keyup.enter="showSkyBackground = !showSkyBackground"
             >
-              {{ showSkyBackground ? 'Hide' : 'Show' }} background
+              {{ showSkyBackground ? 'Hide' : 'Show' }} Stars
             </button>
             
             <button
@@ -91,7 +91,7 @@
               @click="showTrajectory = !showTrajectory"
               @keyup.enter="showTrajectory = !showTrajectory"
             >
-              {{ showSkyBackground ? 'Hide' : 'Show' }} Trajectory
+              {{ showTrajectory ? 'Hide' : 'Show' }} Artemis Path
             </button>
             
             <hr />
@@ -102,14 +102,14 @@
               @click="trackingCenter = SolarSystemObjects.moon"
               @keyup.enter="trackingCenter = SolarSystemObjects.moon"
             >
-              Track Moon
+              Moon View
             </button>
             <button
               class="artemis-btn"
               @click="trackingCenter = SolarSystemObjects.earth"
               @keyup.enter="trackingCenter = SolarSystemObjects.earth"
             >
-              Track Earth
+              Earth View
             </button>
             
             <div 

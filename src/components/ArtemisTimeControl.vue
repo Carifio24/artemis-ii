@@ -119,9 +119,9 @@ function stepMs(daysPerSecond: number): number {
   return realStep;
 }
 const rates = [
-  ['2 hr/sec', stepMs(1/24)],
-  ['~1.5 days/sec', stepMs(35/24)],
-  ['~3 days/sec', stepMs(3)],
+  ['6 hrs/sec', stepMs(6/24)],
+  ['12 hrs/sec', stepMs(0.5)],
+  ['1 day/sec', stepMs(1)],
 ] as const;
 
 const rate = ref(rates[1][1]);
