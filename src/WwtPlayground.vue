@@ -65,6 +65,25 @@
             </button>
             <button
               class="artemis-btn"
+              @click="showSkyBackground = !showSkyBackground"
+              @keyup.enter="showSkyBackground = !showSkyBackground"
+            >
+              {{ showSkyBackground ? 'Hide' : 'Show' }} background
+            </button>
+            
+            <button
+              class="artemis-btn"
+              @click="showTrajectory = !showTrajectory"
+              @keyup.enter="showTrajectory = !showTrajectory"
+            >
+              {{ showSkyBackground ? 'Hide' : 'Show' }} Trajectory
+            </button>
+            
+            <hr />
+            
+            
+            <button
+              class="artemis-btn"
               @click="trackingCenter = SolarSystemObjects.moon"
               @keyup.enter="trackingCenter = SolarSystemObjects.moon"
             >
@@ -77,6 +96,16 @@
             >
               Track Earth
             </button>
+            
+            <div 
+              v-if="!smallSize" 
+              class="legend"
+            >
+              <p class="location">
+                <span>Artemis II location</span>
+              </p>
+              <p>Artemis II trajectory</p>
+            </div>
           </div>
         </div>
 
@@ -85,9 +114,19 @@
 
         <div id="bottom-content">
           <ArtemisTimeControl 
+            v-model:time="currentTime"
             :can-create="positionSet" 
             :initial-time="INITIAL_TIME" 
           />
+          <div 
+            v-if="smallSize" 
+            class="legend legend-small"
+          >
+            <p class="location">
+              <span>Location</span>
+            </p>
+            <p>Trajectory</p>
+          </div>
           <div
             v-if="!smallSize"
             id="body-logos"
@@ -192,8 +231,8 @@ const accentColor = ref("#ffa000");
 const buttonColor = ref("#ffffff");
 
 const urlTime = new URLSearchParams(window.location.search).get("time");
-
-const INITIAL_TIME = ref(urlTime ? new Date(+urlTime) : new Date("2026-04-06T22:32:00Z"));
+const HOME_TIME = new Date("2026-04-06T22:32:00Z");
+const INITIAL_TIME = ref(urlTime ? new Date(+urlTime) : HOME_TIME);
 const INITIAL_VIEW: CameraView = {
   // lng: 169.906038,
   lng: 168.007573,
@@ -206,6 +245,28 @@ const INITIAL_VIEW: CameraView = {
   time: INITIAL_TIME.value.getTime()
 };
 
+// http://localhost:5174/?lng=316.555988&lat=74.277000&fov=0.017202&rot=0.000000&angle=0.000000&time=1775474823266
+const EARTH_VIEW: CameraView = {
+  lng: 316.555988,
+  lat: 74.277000,
+  zoomDeg: 0.017202,
+  rotationDeg: 0,
+  angleDeg: 0,
+  time: 1775474823266
+};
+// const HOME_VIEW: CameraView = {
+//   // lng: 169.906038,
+//   lng: 168.007573,
+//   // lat: 1.323000,
+//   lat: 3.591000,
+//   // zoomDeg: 0.000163,
+//   zoomDeg: 0.000157,
+//   rotationDeg: 0,
+//   angleDeg: 0,
+//   time: HOME_TIME.getTime()
+// };
+
+
 const zoomSliderValue = computed(() => fovToSlider(store.zoomDeg));
 
 function onZoomSlider(e: Event) {
@@ -216,7 +277,11 @@ function onZoomSlider(e: Event) {
   WWTControl.singleton.renderOneFrame();
 }
 
+const currentTime = ref(INITIAL_TIME.value);
+
 function goHome() {
+  currentTime.value = INITIAL_TIME.value;
+  trackingCenter.value = SolarSystemObjects.moon;
   moveViewCamera(INITIAL_VIEW, false);
 }
 
@@ -248,6 +313,8 @@ import InformationSheet from "./components/InformationSheet.vue";
 const layers = ref<SpreadSheetLayer[]>([]);
 
 const trackingCenter = ref<SolarSystemObjects>(SolarSystemObjects.moon);
+  
+const showTrajectory = ref(true);
 
 async function createArtemisLayers(trackedObject: SolarSystemObjects) {
   
@@ -266,25 +333,28 @@ async function createArtemisLayers(trackedObject: SolarSystemObjects) {
   bounds = [[0, centerStart], ...bounds, [centerEnd, end]];
   bounds.forEach((bds) => {
     const data = items.slice(...bds).join("\r\n");
-    store.createTableLayer({
-      name: 'Artemis',
-      referenceFrame: 'Sky',
-      dataCsv: `${header}\r\n${data}`,
-    }).then(layer => {
-      layer.set_xAxisColumn(2);
-      layer.set_yAxisColumn(3);
-      layer.set_zAxisColumn(4);
-      layer.set_coordinatesType(CoordinatesType.rectangular);
-      layer.set_astronomical(true);
-      layer.set_cartesianScale(AltUnits.astronomicalUnits);
-      layer.set_altUnit(AltUnits.astronomicalUnits);
-      layer.set_markerScale(MarkerScales.screen);
-      layer.set_scaleFactor(10);
-      layer.set_color(Color.fromHex("#ffffff"));
-      layer.set_showFarSide(true);
-      layer.set_opacity(25);
-      layers.value.push(layer);
-    });
+    
+    if (showTrajectory.value) {
+      store.createTableLayer({
+        name: 'Artemis',
+        referenceFrame: 'Sky',
+        dataCsv: `${header}\r\n${data}`,
+      }).then(layer => {
+        layer.set_xAxisColumn(2);
+        layer.set_yAxisColumn(3);
+        layer.set_zAxisColumn(4);
+        layer.set_coordinatesType(CoordinatesType.rectangular);
+        layer.set_astronomical(true);
+        layer.set_cartesianScale(AltUnits.astronomicalUnits);
+        layer.set_altUnit(AltUnits.astronomicalUnits);
+        layer.set_markerScale(MarkerScales.screen);
+        layer.set_scaleFactor(5);
+        layer.set_color(Color.fromHex("#ffffff"));
+        layer.set_showFarSide(true);
+        layer.set_opacity(25);
+        layers.value.push(layer);
+      });
+    }
   
 
     
@@ -347,6 +417,8 @@ function removeArtemisLayers() {
   layers.value = [];
 }
 
+const showSkyBackground = ref(true);
+
 onMounted(() => {
   store.waitForReady().then(async () => {
     WWTControl.singleton.set_zoomMax(ZOOM_MAX);
@@ -358,7 +430,8 @@ onMounted(() => {
     store.setBackgroundImageByName("Solar System");
     store.applySetting(["actualPlanetScale", true]);
     store.applySetting(["solarSystemCosmos", true]);
-    store.applySetting(["solarSystemMilkyWay", true]);
+    store.applySetting(["solarSystemMilkyWay", showSkyBackground.value]);
+    store.applySetting(["solarSystemStars", showSkyBackground.value]);
     store.setTrackedObject(SolarSystemObjects.moon);
 
     // @ts-expect-error this does exist
@@ -389,10 +462,27 @@ onMounted(() => {
   });
 });
 
+watch(showSkyBackground, (show) => {
+  try {
+    store.applySetting(["solarSystemMilkyWay", show]);
+    store.applySetting(["solarSystemStars", show]);
+  } catch {
+    return;
+  }
+});
+
 watch(trackingCenter, (trackedObject) => {
   removeArtemisLayers();
   store.setTrackedObject(trackedObject);
+  if (trackedObject === SolarSystemObjects.earth) {
+    moveViewCamera(EARTH_VIEW, false);
+  }
   createArtemisLayers(trackedObject);
+});
+
+watch(showTrajectory, (show) => {
+  removeArtemisLayers();
+  createArtemisLayers(trackingCenter.value);
 });
 
 const ready = computed(() => layersLoaded.value && positionSet.value);
@@ -593,6 +683,11 @@ and remember, position:absolute is still a positioned parent, so children can be
   gap: 10px;
   align-items: flex-end;
   height: auto;
+  
+  hr {
+    margin-block: 0.25em;
+    opacity: 0;
+  }
 
   .artemis-btn {
     pointer-events: auto;
@@ -600,7 +695,7 @@ and remember, position:absolute is still a positioned parent, so children can be
     border: 1px solid rgba(255, 255, 255, 0.45);
     border-radius: 4px;
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 0.8em;
     padding: 4px 10px;
     cursor: pointer;
     &:hover { background: rgba(255, 255, 255, 0.25); }
@@ -616,6 +711,28 @@ and remember, position:absolute is still a positioned parent, so children can be
     }
   }
 }
+
+
+#app.app-is-small .artemis-btn {
+  font-size: 0.65rem;
+}
+
+#app.app-is-small  .copy-btn {
+    width: 16ch;
+}
+
+.icon-wrapper {
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    &:hover { background: rgba(255, 255, 255, 0.25); }
+  }
+  
 
 #bottom-content {
   display: flex;
@@ -645,11 +762,16 @@ and remember, position:absolute is still a positioned parent, so children can be
   }
 }
 
+#app.app-is-small #bottom-content {
+  margin-bottom: 1rem;
+  padding-inline: 1rem;
+}
+
 // From Sara Soueidan (https://www.sarasoueidan.com/blog/focus-indicators/) & Erik Kroes (https://www.erikkroes.nl/blog/the-universal-focus-state/)
-:focus-visible, .focus-visible, .v-selection-control--focus-visible .v-selection-control__input {
+:focus-visible {
   /* Keep this override outside Vuetify's layers so it wins without !important. */
-  outline: 6px double white;
-  box-shadow: 0 0 0 3px black;
+  outline: 4px double white;
+  box-shadow: 0 0 0 2px black;
   border-radius: .025rem;
 }
 
@@ -679,5 +801,42 @@ and remember, position:absolute is still a positioned parent, so children can be
   // flex: 0 0 200px;
   overflow: auto;
 }
+
+.legend {
+  font-size: 0.8em;
+  line-height: 2;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 0.5em;
+  padding-left: 1em;
+  background-color: rgba(0,0,0,.6);
+  backdrop-filter: blur(5px);
+  margin-top: calc(0.5em + 10px);
+  pointer-events: auto;
+  user-select: none;
+}
+
+.legend > p {
+  display: list-item;
+  list-style-type: disc;
+  list-style-position: inside;
+}
+
+.legend > p.location {
+  color: red;
+}
+.legend > p.location > span {
+  color: white;
+}
+
+.legend-small {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-size: clamp(6pt, 4vw, 0.8em);
+  margin-top: 2em;
+}
+
+
 
 </style>
