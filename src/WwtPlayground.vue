@@ -48,9 +48,9 @@
             <icon-button
               v-if="kiosk && !fullscreen"
               id="fullscreen-icon"
-              @activate="fullscreen = !fullscreen"
               :icon="fullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
               :color="buttonColor"
+              @activate="fullscreen = !fullscreen"
             >
             </icon-button>
             <icon-button
